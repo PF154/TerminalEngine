@@ -1,0 +1,19 @@
+#pragma once
+
+struct Position
+{
+	double x;
+	double y;
+};
+
+struct Velocity
+{
+	double x;
+	double y;
+};
+
+struct Size
+{
+	int x;
+	int y;
+};
