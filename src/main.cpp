@@ -1,4 +1,5 @@
 #include <iostream>
+#include <memory>
 
 #include "../include/core/Engine.hpp"
 #include "../include/core/Game.hpp"
@@ -6,10 +7,10 @@
 #include "../include/components/ComponentUtils.hpp"
 #include "../example/include/Block.hpp"
 
-Game* createTestGame()
+std::shared_ptr<Game> createTestGame()
 {
-	Game* testGame = new Game();
-	Scene* testScene = new Scene();
+	std::shared_ptr<Game> testGame = std::make_shared<Game>();
+	std::shared_ptr<Scene> testScene = std::make_shared<Scene>();
 
 	// Block* block = new Block(testGame);
 	// block->position = Position{4, 4};
@@ -26,7 +27,7 @@ int main()
 
 	// Create instance of engine and run it.
 	Engine engine;
-	Game* testGame = createTestGame();
+	std::shared_ptr<Game> testGame = createTestGame();
 	engine.setGame(testGame);
 
 	engine.run();

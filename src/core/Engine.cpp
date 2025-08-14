@@ -20,7 +20,7 @@ bool printMesh = true;
 
 Engine::Engine()
 {
-	this->viewport = Viewport(60, 40);
+	this->m_viewport = Viewport(60, 40);
 }
 
 Engine::~Engine()
@@ -30,18 +30,20 @@ Engine::~Engine()
 
 void Engine::begin()
 {
-	this->game->play();
+	this->m_game->play();
 
-	for (int i=0; i<this->viewport.getYSize()+2; i++) 
+	loadNewScene(m_game->getCurrentScene());
+
+	for (int i=0; i<this->m_viewport.getYSize()+2; i++) 
 	{
-		std::cout << "." << std::string(this->viewport.getXSize()+2, '.') << std::endl;
+		std::cout << "." << std::string(this->m_viewport.getXSize()+2, '.') << std::endl;
 	}
 }
 
 void Engine::run()
 {
 
-	if (this->game == nullptr)
+	if (this->m_game == nullptr)
 	{
 		std::cout << "Attempted to run engine on undefined game, aborting." << std::endl;
 		return;
@@ -52,7 +54,7 @@ void Engine::run()
 	using clock = std::chrono::steady_clock;
 
 	// const std::chrono::duration<double> target_frame_duration{1.0 / tick_rate};
-	const std::chrono::duration<double> target_frame_duration{1.0 / tick_rate};
+	const std::chrono::duration<double> target_frame_duration{1.0 / m_tick_rate};
 
 
 	debug_log << "target_frame_duration = " << target_frame_duration << std::endl;
@@ -83,13 +85,13 @@ void Engine::update(double delta)
 {
 
 	// At each tick, we want to compute collisions (this should eventually be a part of calling update on objects I think?)
-	Scene* currentScene = this->game->getCurrentScene();
-	if (!currentScene) {
-		std::cout << "ERROR: currentScene is null!\n" << std::endl;
+	// Scene* currentScene = this->m_game->getCurrentScene();
+	if (!m_current_scene) {
+		std::cout << "ERROR: m_current_scene is null!\n" << std::endl;
 		return;
 	}
 
-	for (std::shared_ptr<GameObject> gameObject : currentScene->getGameObjects()) gameObject->update(delta);
+	for (std::shared_ptr<GameObject> gameObject : m_current_scene->getGameObjects()) gameObject->update(delta);
 
 	// Draw Frame
 	graphicsUpdate(delta);
@@ -98,37 +100,24 @@ void Engine::update(double delta)
 
 void Engine::graphicsUpdate(double delta)
 {
-	// std::cout << "Graphics update called" << std::endl;
-	// Draw logic
-	// At every tick, the engine should compute the frame to draw to the terminal
-	// We first want to get the viewport frame
-	// Then, we want to get the information of every GameObject in the scene
-	// The GameObject will not have it's own draw function.
-	// GameObject should have a getMesh() function or something similar, that
-	// sends it's visual representation to the engine.
-	// However, the problem is that we need to check which parts of the mesh are in the viewport.
-	// I think what we want is to get the whole visual from the GameObject, along with the GameObject's position
-	// From there, we can calculate which vertices (characters) are on screen
-
-
 	// Draw viewport
 
 	// Frame corresponds to the frame to be rendered, not just the "picture frame" outline of the viewport
 	// We do, however, use the viewport outline as a starting point
-	std::vector<std::string> frame = this->viewport.getVisual();
+	std::vector<std::string> frame = this->m_viewport.getVisual();
 	moveCursorUp(frame.size() + 2);
 
 	// // Due to z-sorting, this loop should automatically iterate back-to-front
 
-	if (!this->game) {
+	if (!this->m_game) {
 		std::cout << "ERROR: game is null!\n" << std::endl;
 		return;
 	}
 
-	Scene* currentScene = this->game->getCurrentScene();
+	// Scene* currentScene = this->m_game->getCurrentScene();
 	// std::cout << "got scene at " << static_cast<const void*>(currentScene) << std::endl;
 
-	if (!currentScene) {
+	if (!m_current_scene) {
 		std::cout << "ERROR: currentScene is null!\n" << std::endl;
 		return;
 	}
@@ -136,7 +125,7 @@ void Engine::graphicsUpdate(double delta)
 	// std::vector<VisualObject*> visualObjects;
 	// for (GameObject* gameObject : currentScene->getGameObjects())
 
-	for (std::shared_ptr<GameObject> gameObject : currentScene->getGameObjects())
+	for (std::shared_ptr<GameObject> gameObject : m_current_scene->getGameObjects())
 	{
 		std::shared_ptr<VisualObject> visualObject = std::dynamic_pointer_cast<VisualObject>(gameObject);
 		if (visualObject)
@@ -192,9 +181,21 @@ void Engine::graphicsUpdate(double delta)
 		clearLine();
 		std::cout << frame[line] << std::endl;
 	}
-	std::cout << "Game objects in scene: " << currentScene->getGameObjects().size() << std::endl;
+	std::cout << "Game objects in scene: " << m_current_scene->getGameObjects().size() << std::endl;
 	// std::cout << "Filtered objects in scene: " << visualObjects.size() << std::endl;
 	std::cout << "FPS: " << 1.0 / delta << std::endl;
 
 
+}
+
+void Engine::loadNewScene(std::shared_ptr<Scene> new_scene)
+{
+	// Old Scene Clean up (probably handled in Scene destructor??)
+
+	m_current_scene = new_scene;
+	for (std::shared_ptr<GameObject> gameObject : m_current_scene->getGameObjects())
+	{
+		debug_log << "Calling init on " << gameObject << std::endl;
+		gameObject->init();
+	}
 }

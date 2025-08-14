@@ -12,10 +12,14 @@ add_executable(TerminalEngine
     src/core/Engine.cpp
 	src/core/Game.cpp
     src/core/Scene.cpp
+	src/core/EventSystem/EventHandler.cpp
+	src/core/EventSystem/SignalEmitter.cpp
+	src/core/EventSystem/SignalCatcher.cpp
 	src/utils/TerminalTools.cpp
 	src/components/Viewport.cpp
 	src/components/GameObject.cpp
 	src/components/CollisionObject.cpp
 	src/components/VisualObject.cpp
 	example/src/Block.cpp
+	example/src/CatcherTest.cpp
 )

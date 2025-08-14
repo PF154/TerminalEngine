@@ -2,8 +2,10 @@
 
 #include "../components/Viewport.hpp"
 #include "../core/Game.hpp"
+#include "../core/Scene.hpp"
 
 #include <vector>
+#include <memory>
 
 // What do we want here?
 // Update function
@@ -17,17 +19,20 @@ class Engine
 		~Engine();
 		void run();
 
-		inline void setGame(Game* game) { this->game = game; };
+		inline void setGame(std::shared_ptr<Game> game) { this->m_game = std::move(game); };
 	private:
 		void begin();
 		void update(double delta);
 		void graphicsUpdate(double delta);
+		void loadNewScene(std::shared_ptr<Scene> new_scene);
 
-		Game* game;
+		// At the moment these are shared pointers. I feel like I can at least make m_current_scene unique, but this is faster to test with
+		std::shared_ptr<Game> m_game;
+		std::shared_ptr<Scene> m_current_scene;
 
-		Viewport viewport;
+		Viewport m_viewport;
 
-		int tick_rate = 30; // Ticks per second
+		int m_tick_rate = 30; // Ticks per second
 
 		// Essential Functions
 		// void createInstance(GameObject* object);

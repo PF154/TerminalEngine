@@ -3,6 +3,7 @@
 // #include "Scene.hpp"
 
 #include <vector>
+#include <memory>
 
 class Scene;
 
@@ -18,12 +19,12 @@ class Game
 	public:
 		void play();
 
-		inline void setStartScene(Scene* scene) { startScene = scene; };
+		inline void setStartScene(std::shared_ptr<Scene> scene) { startScene = scene; };
 
-		inline Scene* getCurrentScene() { return currentScene; };
+		std::shared_ptr<Scene> getCurrentScene() { return currentScene; };
 
 		const double GRAVITY = 5.0;
 	private:
-		Scene* currentScene;
-		Scene* startScene;
+		std::shared_ptr<Scene> currentScene;
+		std::shared_ptr<Scene> startScene;
 };

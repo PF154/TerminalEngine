@@ -17,3 +17,9 @@ struct Size
 	int x;
 	int y;
 };
+
+struct Scale
+{
+	int x;
+	int y;
+};

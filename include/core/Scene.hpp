@@ -1,5 +1,8 @@
 #pragma once
 
+#include "../../include/core/EventSystem/EventHandler.hpp"
+#include "../../include/core/SceneData.hpp"
+
 #include <vector>
 #include <iostream>
 #include <memory>
@@ -20,10 +23,14 @@ class Scene
 			};
 
 		// inline void addEntity(GameObject* gameObject) { gameObjects.push_back(gameObject); };
-		inline void addEntity(std::shared_ptr<GameObject> gameObject) { gameObjects.push_back(gameObject); };
+		void addEntity(std::shared_ptr<GameObject> gameObject);
 
 		const double GRAVITY = 5.0;
 	private:
 		// std::vector<GameObject*> gameObjects;
 		std::vector<std::shared_ptr<GameObject>> gameObjects;
+
+		std::shared_ptr<SceneData> m_scene_data;
+
+		std::shared_ptr<EventHandler> m_event_handler;
 };
