@@ -1,9 +1,9 @@
-#include "../../include/core/Scene.hpp"
-#include "../../include/components/GameObject.hpp"
+#include <core/Scene.hpp>
+#include <components/GameObject.hpp>
 #include "../../example/include/Block.hpp"
 #include "../../example/include/CatcherTest.hpp"
-#include "../../include/core/EventSystem/EventHandler.hpp"
-#include "../../include/core/SceneData.hpp"
+#include <core/EventSystem/EventHandler.hpp>
+#include <core/SceneData.hpp>
 
 #include <vector>
 #include <memory>

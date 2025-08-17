@@ -1,5 +1,5 @@
-#include "../../include/core/Game.hpp"
-#include "../../include/core/Scene.hpp"
+#include <core/Game.hpp>
+#include <core/Scene.hpp>
 
 void Game::play()
 {

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "EventHandler.hpp"
-#include "Signal.hpp"
+#include <core/EventSystem/EventHandler.hpp>
+#include <core/EventSystem/Signal.hpp>
 
 #include <memory>
 #include <string>

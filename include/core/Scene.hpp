@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../../include/core/EventSystem/EventHandler.hpp"
-#include "../../include/core/SceneData.hpp"
+#include <core/EventSystem/EventHandler.hpp>
+#include <core/SceneData.hpp>
 
 #include <vector>
 #include <iostream>

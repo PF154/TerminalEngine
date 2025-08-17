@@ -1,9 +1,9 @@
 #pragma once
 
-#include "../../include/components/CollisionObject.hpp"
-#include "../../include/components/ComponentUtils.hpp"
-#include "../../include/core/EventSystem/SignalEmitter.hpp"
-#include "../../include/core/EventSystem/EventHandler.hpp"
+#include <components/CollisionObject.hpp>
+#include <components/ComponentUtils.hpp>
+#include <core/EventSystem/SignalEmitter.hpp>
+#include <core/EventSystem/EventHandler.hpp>
 
 #include <vector>
 #include <string>

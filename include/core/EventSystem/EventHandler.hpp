@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Signal.hpp"
+#include <core/EventSystem/Signal.hpp>
 
 #include <unordered_map>
 #include <memory>

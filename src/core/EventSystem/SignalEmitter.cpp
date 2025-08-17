@@ -1,5 +1,5 @@
-#include "../../../include/core/EventSystem/SignalEmitter.hpp"
-#include "../../../include/core/EventSystem/EventHandler.hpp"
+#include <core/EventSystem/SignalEmitter.hpp>
+#include <core/EventSystem/EventHandler.hpp>
 
 #include <memory>
 #include <string>

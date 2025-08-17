@@ -1,11 +1,10 @@
-#include "../../include/core/Engine.hpp"
-#include "../../include/core/Game.hpp"
-#include "../../include/core/Scene.hpp"
-#include "../../include/utils/TerminalTools.hpp"
-#include "../../include/components/GameObject.hpp"
-#include "../../include/components/VisualObject.hpp"
+#include <core/Engine.hpp>
+#include <core/Game.hpp>
+#include <core/Scene.hpp>
+#include <utils/TerminalTools.hpp>
+#include <components/GameObject.hpp>
+#include <components/VisualObject.hpp>
 
-#include "../../example/include/Block.hpp"
 
 #include <string>
 #include <vector>

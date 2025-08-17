@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Signal.hpp"
-#include "EventHandler.hpp"
-#include "../SceneData.hpp"
+#include <core/EventSystem/Signal.hpp>
+#include <core/EventSystem/EventHandler.hpp>
+#include <core/SceneData.hpp>
 
 #include <memory>
 #include <string>

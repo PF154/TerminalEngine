@@ -1,7 +1,7 @@
 #pragma once
 
-#include "GameObject.hpp"
-#include "ComponentUtils.hpp"
+#include <components/GameObject.hpp>
+#include <components/ComponentUtils.hpp>
 
 #include <vector>
 #include <string>

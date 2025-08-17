@@ -2,7 +2,7 @@
 
 // Holds scene specific data, like event handlers etc.
 
-#include "EventSystem/EventHandler.hpp"
+#include <core/EventSystem/EventHandler.hpp>
 
 #include <memory>
 

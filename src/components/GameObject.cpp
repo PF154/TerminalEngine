@@ -1,7 +1,7 @@
-#include "../../include/components/GameObject.hpp"
-#include "../../include/core/EventSystem/Signal.hpp"
-#include "../../include/core/EventSystem/SignalEmitter.hpp"
-#include "../../include/core/EventSystem/SignalCatcher.hpp"
+#include <components/GameObject.hpp>
+#include <core/EventSystem/Signal.hpp>
+#include <core/EventSystem/SignalEmitter.hpp>
+#include <core/EventSystem/SignalCatcher.hpp>
 
 #include <iostream>
 #include <format>

@@ -1,4 +1,4 @@
-#include "../../../include/core/EventSystem/SignalCatcher.hpp"
+#include <core/EventSystem/SignalCatcher.hpp>
 
 void SignalCatcher::attempt_catch()
 {

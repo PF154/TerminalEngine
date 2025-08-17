@@ -7,6 +7,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include_directories(include)
 
+
+
+
 add_executable(TerminalEngine
     src/main.cpp
     src/core/Engine.cpp
@@ -22,4 +25,9 @@ add_executable(TerminalEngine
 	src/components/VisualObject.cpp
 	example/src/Block.cpp
 	example/src/CatcherTest.cpp
+)
+
+target_include_directories(TerminalEngine PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
 )

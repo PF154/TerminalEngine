@@ -1,4 +1,4 @@
-#include "../../include/utils/TerminalTools.hpp"
+#include <utils/TerminalTools.hpp>
 
 #include <iostream>
 

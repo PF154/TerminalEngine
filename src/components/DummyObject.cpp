@@ -1,4 +1,4 @@
-#include "../../include/components/GameObject.hpp"
+#include <components/GameObject.hpp>
 
 #include <string>
 #include <chrono>

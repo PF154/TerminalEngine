@@ -1,6 +1,6 @@
-#include "../../include/components/VisualObject.hpp"
-#include "../../include/components/GameObject.hpp"
-#include "../../include/components/ComponentUtils.hpp"
+#include <components/VisualObject.hpp>
+#include <components/GameObject.hpp>
+#include <components/ComponentUtils.hpp>
 
 VisualObject::VisualObject() : GameObject()
 {

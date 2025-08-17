@@ -1,6 +1,6 @@
 #pragma once
 
-#include "VisualObject.hpp"
+#include <components/VisualObject.hpp>
 
 class CollisionObject : public VisualObject
 {

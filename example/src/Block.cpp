@@ -1,10 +1,14 @@
+// Kind of bad practice, but I'm keeping relative paths for example objects
+// Eventually these should be compiled some way with CMake to avoid this
+// Maybe we put that on the user, maybe we find a way to streamline it, idk
+
 #include "../include/Block.hpp"
-#include "../../include/components/CollisionObject.hpp"
-#include "../../include/components/GameObject.hpp"
-#include "../../include/components/ComponentUtils.hpp"
-#include "../../include/core/EventSystem/SignalEmitter.hpp"
-#include "../../include/core/EventSystem/Signal.hpp"
-#include "../../include/core/EventSystem/EventHandler.hpp"
+#include <components/CollisionObject.hpp>
+#include <components/GameObject.hpp>
+#include <components/ComponentUtils.hpp>
+#include <core/EventSystem/SignalEmitter.hpp>
+#include <core/EventSystem/Signal.hpp>
+#include <core/EventSystem/EventHandler.hpp>
 
 #include <vector>
 #include <string>

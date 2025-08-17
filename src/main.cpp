@@ -1,11 +1,9 @@
 #include <iostream>
 #include <memory>
 
-#include "../include/core/Engine.hpp"
-#include "../include/core/Game.hpp"
-#include "../include/core/Scene.hpp"
-#include "../include/components/ComponentUtils.hpp"
-#include "../example/include/Block.hpp"
+#include <core/Engine.hpp>
+#include <core/Game.hpp>
+#include <core/Scene.hpp>
 
 std::shared_ptr<Game> createTestGame()
 {

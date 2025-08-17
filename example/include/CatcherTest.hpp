@@ -1,6 +1,6 @@
 
-#include "../../include/components/GameObject.hpp"
-#include "../../include/core/EventSystem/Signal.hpp"
+#include <components/GameObject.hpp>
+#include <core/EventSystem/Signal.hpp>
 
 #include <memory>
 

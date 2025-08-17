@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../components/Viewport.hpp"
-#include "../core/Game.hpp"
-#include "../core/Scene.hpp"
+#include <components/Viewport.hpp>
+#include <core/Game.hpp>
+#include <core/Scene.hpp>
 
 #include <vector>
 #include <memory>
