@@ -3,7 +3,6 @@
 #include <core/Scene.hpp>
 #include <utils/TerminalTools.hpp>
 #include <components/GameObject.hpp>
-#include <components/VisualObject.hpp>
 #include <components/Mesh.hpp>
 
 

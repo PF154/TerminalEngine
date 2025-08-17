@@ -21,8 +21,6 @@ add_executable(TerminalEngine
 	src/utils/TerminalTools.cpp
 	src/components/Viewport.cpp
 	src/components/GameObject.cpp
-	src/components/CollisionObject.cpp
-	src/components/VisualObject.cpp
 	example/src/Block.cpp
 	example/src/CatcherTest.cpp
 )
