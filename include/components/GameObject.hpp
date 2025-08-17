@@ -1,6 +1,11 @@
 #pragma once
 
 #include <components/ComponentUtils.hpp>
+#include <components/Mesh.hpp>
+#include <components/StaticMesh.hpp>
+#include <components/AnimMesh.hpp>
+#include <components/Transform.hpp>
+#include <components/Collider.hpp>
 #include <core/SceneData.hpp>
 #include <core/EventSystem/SignalEmitter.hpp>
 #include <core/EventSystem/SignalCatcher.hpp>
@@ -27,6 +32,11 @@ class GameObject
 			m_scene_data = scene_data;
 		}
 
+
+		// This function is for the user to define the object. It is where we add components, set
+		// position, etc.
+		virtual void setup() {};
+
 		// This function is for game logic stuff that needs to occur after the object has been constructed
 		// I believe that this will be a function the user overrides eventually
 		// At the moment it handles the following expanded list of stuff
@@ -36,8 +46,46 @@ class GameObject
 		Velocity velocity;
 		Size size;
 
-		// Originally was going to do this as unordered map, but that seems needlessly complex
-		// for this alternative which does all the same stuff.
+		
+		// Renderer should call this every frame. The engine will look to see if it got something,
+		// and if it did, it will render it. I think this simplifys things, becuase otherwise we
+		// have some redundant call like "if (gameObject->has_mesh())". Whereas here we can do
+		// std::shared_ptr<Mesh> obj_mesh = gameObject->get_mesh(); if (obj_mesh) {//render code}
+		std::shared_ptr<Mesh> get_mesh() { return m_mesh; };
+		std::shared_ptr<Collider> get_collider() { return m_collider; };
+		std::shared_ptr<Transform> get_transform() { return m_transform; };
+
+		// I think the hard part is choosing where the user sets all these components. Let's think about
+		// what parts of the Engine API are actually available to them. They get init() and process() to
+		// control the GameObject's behavior, so I guess init() is where it makes the most sense. I think
+		// we should maybe make some methods like addMesh, addCollider, addTransform. Maybe it would also
+		// make sense to have a setup() function for the user. It wouldn't be much functionally different
+		// than init(), but it would, by name, clearly define that that is where the object properties should
+		// be set up, absent of a GUI program like how you would do it in Unity or Godot. I kind of like that.
+		// And then init() would be reserved for actual BEHAVIORS of the object that should happen upon
+		// creation/instantiation.
+
+
+		// Other functions that will be useful
+		Position get_position(); 
+
+
+		// The following setup functions will be used by the end-user for object definition
+		void add_satic_mesh();
+		void add_static_mesh(std::shared_ptr<StaticMesh> new_mesh);
+
+		void replace_mesh_with_static();
+		void replace_mesh_with_static(std::shared_ptr<StaticMesh> new_mesh);
+
+		void add_anim_mesh();
+		void add_anim_mesh(std::shared_ptr<AnimMesh> new_mesh);
+
+		void replace_mesh_with_anim();
+		void replace_mesh_with_anim(std::shared_ptr<AnimMesh> new_mesh);
+
+		// If the user opts for one of the argument-less functions, we need some way for them to still set the values
+		void add_transform();
+		void add_transform(std::shared_ptr<Transform> new_trans);
 
 
 		
@@ -46,7 +94,7 @@ class GameObject
 		virtual void process(double delta);
 		virtual void physicsProcess(double delta);
 
-		void applyGravity(GameObject* object, double delta);
+		void applyGravity(GameObject& object, double delta);
 
 		std::shared_ptr<SignalEmitter> create_signal_emitter(std::shared_ptr<Signal> signal, std::string socket_name);
 
@@ -55,5 +103,10 @@ class GameObject
 		std::shared_ptr<SceneData> m_scene_data;
 		std::vector<std::shared_ptr<SignalCatcher>> m_signal_catchers;
 
-		
+		// Originally was going to do this as unordered map, but that seems needlessly complex
+		// for this alternative which does all the same stuff.
+		std::shared_ptr<Mesh> m_mesh = nullptr;
+		std::shared_ptr<Collider> m_collider = nullptr;
+		std::shared_ptr<Transform> m_transform = nullptr;
+
 };

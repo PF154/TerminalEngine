@@ -1,6 +1,6 @@
 #pragma once
 
-#include <components/CollisionObject.hpp>
+#include <components/GameObject.hpp>
 #include <components/ComponentUtils.hpp>
 #include <core/EventSystem/SignalEmitter.hpp>
 #include <core/EventSystem/EventHandler.hpp>
@@ -9,20 +9,16 @@
 #include <string>
 #include <memory>
 
-class Block : public CollisionObject
+class Block : public GameObject
 {
 	public:
 		Block();
 		virtual ~Block() = default;
 
-		std::vector<std::string> getVisual() override;
-
+		void setup() override;
 		void init() override;
 	private:
 		void physicsProcess(double delta) override;
-
-		std::vector<std::vector<std::string>*> sprites;
-		std::vector<std::string>* currentSprite;
 
 		std::shared_ptr<SignalEmitter> m_test_signal_emitter;
 

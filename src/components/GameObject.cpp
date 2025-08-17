@@ -3,6 +3,10 @@
 #include <core/EventSystem/SignalEmitter.hpp>
 #include <core/EventSystem/SignalCatcher.hpp>
 
+#include <components/StaticMesh.hpp>
+#include <components/AnimMesh.hpp>
+#include <components/Transform.hpp>
+
 #include <iostream>
 #include <format>
 #include <memory>
@@ -32,11 +36,12 @@ void GameObject::physicsProcess(double delta)
 	
 }
 
-void GameObject::applyGravity(GameObject* object, double delta)
+void GameObject::applyGravity(GameObject& object, double delta)
 {
 	// std::cout << "Appling Gravity _____________________________________________________________________________" << std::endl;
-	object->velocity.y += 75.0;
-	object->position.y += object->velocity.y * delta;
+	std::shared_ptr<Transform> obj_trans = object.get_transform();
+	obj_trans->velocity.y += 75.0;
+	obj_trans->position.y += obj_trans->velocity.y * delta;
 }
 
 std::shared_ptr<SignalEmitter> GameObject::create_signal_emitter(std::shared_ptr<Signal> signal, std::string socket_name)
@@ -74,4 +79,100 @@ void GameObject::create_signal_catcher(std::string socket_name, std::function<vo
 		socket_name,
 		catch_function)
 	);
+}
+
+void GameObject::add_satic_mesh()
+{
+	if (m_mesh)
+	{
+		std::cout << "Attempted ot add static mesh to object with existing mesh object; did you mean to use replace_mesh_with_static?" << std::endl;
+		return;
+	}
+
+	m_mesh = std::make_shared<StaticMesh>();
+}
+
+void GameObject::add_static_mesh(std::shared_ptr<StaticMesh> new_mesh)
+{
+	if (m_mesh)
+	{
+		std::cout << "Attempted ot add static mesh to object with existing mesh object; did you mean to use replace_mesh_with_static?" << std::endl;
+		return;
+	}
+
+	m_mesh = new_mesh;
+}
+
+void GameObject::replace_mesh_with_static()
+{
+	m_mesh = std::make_shared<StaticMesh>();
+}
+
+void GameObject::replace_mesh_with_static(std::shared_ptr<StaticMesh> new_mesh)
+{
+	m_mesh = new_mesh;
+}
+
+void GameObject::add_anim_mesh()
+{
+	if (m_mesh)
+	{
+		std::cout << "Attempted to add anim mesh to object with existing mesh object; did you mean to use replace_mesh_with_anim?" << std::endl;
+		return;
+	}
+
+	m_mesh = std::make_shared<AnimMesh>();
+}
+
+void GameObject::add_anim_mesh(std::shared_ptr<AnimMesh> new_mesh)
+{
+	if (m_mesh)
+	{
+		std::cout << "Attempted to add anim mesh to object with existing mesh object; did you mean to use replace_mesh_with_anim?" << std::endl;
+		return;
+	}
+
+	m_mesh = new_mesh;
+}
+
+void GameObject::replace_mesh_with_anim()
+{
+	m_mesh = std::make_shared<AnimMesh>();
+}
+
+void GameObject::replace_mesh_with_anim(std::shared_ptr<AnimMesh> new_mesh)
+{
+	m_mesh = new_mesh;
+}
+
+void GameObject::add_transform()
+{
+	if (m_transform)
+	{
+		std::cout << "Attempted to add transform to object with existing transform component" << std::endl;
+		return;
+	}
+
+	m_transform = std::make_shared<Transform>();
+}
+
+void GameObject::add_transform(std::shared_ptr<Transform> new_trans)
+{
+	if (m_transform)
+	{
+		std::cout << "Attempted to add transform to object with existing transform component" << std::endl;
+		return;
+	}
+
+	m_transform = new_trans;
+}
+
+Position GameObject::get_position()
+{
+	if (!m_transform)
+	{
+		std::cerr << "Attempted to get position, but object has no transform" << std::endl;
+		return Position{0, 0, false};
+	}
+	return m_transform->position;
 }

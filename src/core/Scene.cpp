@@ -34,8 +34,6 @@ Scene::Scene()
 	// Block* block = new Block();
 	std::shared_ptr<Block> block = std::make_shared<Block>();
 
-	block->position = Position{4, 4};
-
 	addEntity(block);
 
 	std::shared_ptr<CatcherTest> testCatcher = std::make_shared<CatcherTest>();

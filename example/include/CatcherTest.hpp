@@ -9,8 +9,7 @@ class CatcherTest : public GameObject
 	public:
 		CatcherTest ();
 
-		void init() override;
-
+		void setup() override;
 
 	private:
 		void send_debug_message();

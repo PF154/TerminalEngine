@@ -4,6 +4,7 @@ struct Position
 {
 	double x;
 	double y;
+	bool valid = true;
 };
 
 struct Velocity

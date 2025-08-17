@@ -4,6 +4,7 @@
 #include <utils/TerminalTools.hpp>
 #include <components/GameObject.hpp>
 #include <components/VisualObject.hpp>
+#include <components/Mesh.hpp>
 
 
 #include <string>
@@ -20,6 +21,7 @@ bool printMesh = true;
 Engine::Engine()
 {
 	this->m_viewport = Viewport(60, 40);
+	debug_log << "\n";
 }
 
 Engine::~Engine()
@@ -126,12 +128,15 @@ void Engine::graphicsUpdate(double delta)
 
 	for (std::shared_ptr<GameObject> gameObject : m_current_scene->getGameObjects())
 	{
-		std::shared_ptr<VisualObject> visualObject = std::dynamic_pointer_cast<VisualObject>(gameObject);
-		if (visualObject)
+		debug_log << "engine graphics update" << std::endl;
+
+		std::shared_ptr<Mesh> obj_mesh = gameObject->get_mesh();
+		if (obj_mesh)
 		{
 			// std::cout << "Attempting to get mesh" << std::endl;
-			std::vector<std::string> mesh = visualObject->getVisual();
-			if (printMesh) {
+			std::vector<std::string> mesh = obj_mesh->get_current_sprite(delta);
+			if (printMesh) 
+			{
 				for (std::string line : mesh)
 				{
 					debug_log << line << std::endl;
@@ -141,13 +146,28 @@ void Engine::graphicsUpdate(double delta)
 			// std::cout << "Got visual: " << mesh[0] << std::endl;
 
 			// Calculate which parts of the mesh are on screen
-			int y_size = visualObject->getSize().y;
-			int x_size = visualObject->getSize().x;
+			int y_size = obj_mesh->get_size().y;
+			int x_size = obj_mesh->get_size().x;
 
-			int y_pos = visualObject->getPosition().y;
-			int x_pos = visualObject->getPosition().x;
+			int y_pos;
+			int x_pos;
+			Position obj_pos = gameObject->get_position();
+			if (obj_pos.valid)
+			{
+				y_pos = obj_pos.y;
+				x_pos = obj_pos.x;
+			}
+			else
+			{
+				continue;
+			}
+
+			debug_log << "engine graphics update: about to print" << std::endl;
+			debug_log << "x,y = " << x_pos << ", " << y_pos << std::endl;
+			debug_log << "x,y size = " << x_size << ", " << y_size << std::endl;
 
 			// Replace lines of screen with mesh
+			// We need some kind of check here, or maybe in mesh to ensure that the size correctly reflects the size of the object
 			for (int line=0; line<frame.size(); line++)
 			{
 				if (line >= y_pos && line <= y_pos + y_size)
@@ -168,11 +188,7 @@ void Engine::graphicsUpdate(double delta)
 					}
 				}
 			}
-
-			
-
-		}
-		
+		}	
 	}
 
 	for (int line=0; line<frame.size(); line++)
@@ -195,6 +211,7 @@ void Engine::loadNewScene(std::shared_ptr<Scene> new_scene)
 	for (std::shared_ptr<GameObject> gameObject : m_current_scene->getGameObjects())
 	{
 		debug_log << "Calling init on " << gameObject << std::endl;
+		gameObject->setup();
 		gameObject->init();
 	}
 }
