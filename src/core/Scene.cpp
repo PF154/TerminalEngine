@@ -7,6 +7,8 @@
 
 #include <vector>
 #include <memory>
+#include <type_traits>
+#include <iostream>
 
 #include <fstream>
 
@@ -32,13 +34,17 @@ Scene::Scene()
 	// addEntity(dummyObject);
 
 	// Block* block = new Block();
-	std::shared_ptr<Block> block = std::make_shared<Block>();
+	// std::shared_ptr<Block> block = std::make_shared<Block>();
 
-	addEntity(block);
+	// addEntity(block);
 
-	std::shared_ptr<CatcherTest> testCatcher = std::make_shared<CatcherTest>();
+	// std::shared_ptr<CatcherTest> testCatcher = std::make_shared<CatcherTest>();
 
-	addEntity(testCatcher);
+	// addEntity(testCatcher);
+
+	std::shared_ptr<Block> block = instantiateEntity<Block>();
+
+	std::shared_ptr<CatcherTest> testCatcher = instantiateEntity<CatcherTest>();
 }
 
 void Scene::addEntity(std::shared_ptr<GameObject> gameObject) 
@@ -48,5 +54,20 @@ void Scene::addEntity(std::shared_ptr<GameObject> gameObject)
 	// But anyway, here is where we want to make sure that all the member variables of the gameObject are set
 	gameObject->set_scene_data(m_scene_data);
 
-	gameObjects.push_back(gameObject);
+	m_game_objects.push_back(gameObject);
 };
+
+template <typename T>
+std::shared_ptr<T> Scene::instantiateEntity()
+{
+	// We want to make sure that we are actually working with a GameObject before calling things like set_scene_data()
+	static_assert(std::is_base_of<GameObject, T>::value, "Error: Attempted to call instatiateEntity on a class not derived from GameObjeect.");
+
+	std::shared_ptr<T> new_entity = std::make_shared<T>();
+
+	// do some stuff to configure the entity/send it to other objects
+	new_entity->set_scene_data(m_scene_data);
+	m_game_objects.push_back(new_entity);
+
+	return new_entity;
+}

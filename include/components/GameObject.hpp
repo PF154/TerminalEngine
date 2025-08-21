@@ -6,6 +6,7 @@
 #include <components/AnimMesh.hpp>
 #include <components/Transform.hpp>
 #include <components/Collider.hpp>
+#include <components/PhysicsBody.hpp>
 #include <core/SceneData.hpp>
 #include <core/EventSystem/SignalEmitter.hpp>
 #include <core/EventSystem/SignalCatcher.hpp>
@@ -41,11 +42,6 @@ class GameObject
 		// I believe that this will be a function the user overrides eventually
 		// At the moment it handles the following expanded list of stuff
 		virtual void init() {};
-
-		Position position;
-		Velocity velocity;
-		Size size;
-
 		
 		// Renderer should call this every frame. The engine will look to see if it got something,
 		// and if it did, it will render it. I think this simplifys things, becuase otherwise we
@@ -54,6 +50,7 @@ class GameObject
 		std::shared_ptr<Mesh> get_mesh() { return m_mesh; };
 		std::shared_ptr<Collider> get_collider() { return m_collider; };
 		std::shared_ptr<Transform> get_transform() { return m_transform; };
+		std::shared_ptr<PhysicsBody> get_physics_body() { return m_physics_body; }
 
 		// I think the hard part is choosing where the user sets all these components. Let's think about
 		// what parts of the Engine API are actually available to them. They get init() and process() to
@@ -108,5 +105,6 @@ class GameObject
 		std::shared_ptr<Mesh> m_mesh = nullptr;
 		std::shared_ptr<Collider> m_collider = nullptr;
 		std::shared_ptr<Transform> m_transform = nullptr;
+		std::shared_ptr<PhysicsBody> m_physics_body = nullptr;
 
 };
