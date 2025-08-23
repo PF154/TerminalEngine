@@ -60,3 +60,11 @@ void Scene::addEntity(std::shared_ptr<GameObject> gameObject)
 
 	m_scene_data->m_game_objects.push_back(gameObject);
 };
+
+void Scene::delete_object(std::shared_ptr<GameObject> gameObject)
+{
+	m_scene_data->m_game_objects.erase(std::remove(	m_scene_data->m_game_objects.begin(), 
+													m_scene_data->m_game_objects.end(), 
+													gameObject), 
+													m_scene_data->m_game_objects.end());
+}

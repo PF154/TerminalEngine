@@ -55,9 +55,10 @@ void Block::physicsProcess(double delta)
 {
 	applyGravity(*this, delta);
 
-	if (get_transform()->position.y > 30) 
+	if (get_transform()->position.y > 60) 
 	{
-		block_debug_log << "firing signal from block" << std::endl;
-		m_test_signal_emitter->emit();
+		// block_debug_log << "firing signal from block" << std::endl;
+		// m_test_signal_emitter->emit();
+		delete_self();
 	}
 }

@@ -191,13 +191,15 @@ std::shared_ptr<Timer> GameObject::create_new_timer()
 	return new_timer;
 }
 
-// template <typename T>
-// std::shared_ptr<T> GameObject::initstate_game_object()
-// {
-// 	std::shared_ptr<T> new_entity = std::make_shared<T>();
-// 	m_scene_data->m_game_objects.push_back(new_entity);
-// 	return new_entity;
-// }
+void GameObject::delete_self()
+{
+	// How do we want to do this?
+	// For an object to be effectively deleted, we want to remove it from the sceneData list
+	// Maybe the easiest way is to have a bool on each gameObject called mark_for_deletion
+	// And then the engine checks if an object is marked for deletion, and if it is, it removes it
+	// from the scene. Or should that be the scene's responsibility? I don't know.
+	mark_for_deletion = true;
+}
 
 
 

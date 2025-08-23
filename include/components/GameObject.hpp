@@ -76,6 +76,12 @@ class GameObject
 		void add_transform(std::shared_ptr<Transform> new_trans);
 
 
+
+
+
+		bool should_delete() { return mark_for_deletion; }
+
+
 		
 	protected:
 
@@ -111,6 +117,8 @@ class GameObject
 			return new_entity;
 		}
 
+		void delete_self();
+
 		std::shared_ptr<SceneData> m_scene_data;
 		std::vector<std::shared_ptr<SignalCatcher>> m_signal_catchers;
 
@@ -122,4 +130,6 @@ class GameObject
 		std::shared_ptr<Collider> m_collider = nullptr;
 		std::shared_ptr<Transform> m_transform = nullptr;
 		std::shared_ptr<PhysicsBody> m_physics_body = nullptr;
+
+		bool mark_for_deletion = false;
 };

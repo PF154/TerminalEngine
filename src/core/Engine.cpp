@@ -99,7 +99,14 @@ void Engine::update(double delta)
 		return;
 	}
 
-	for (std::shared_ptr<GameObject> gameObject : m_current_scene->getGameObjects()) gameObject->update(delta);
+	for (std::shared_ptr<GameObject> gameObject : m_current_scene->getGameObjects())
+	{ 
+		if (gameObject->should_delete())
+		{
+			m_current_scene->delete_object(gameObject);
+		}
+		gameObject->update(delta);
+	}
 
 	// Draw Frame
 	graphicsUpdate(delta);

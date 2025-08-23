@@ -25,6 +25,8 @@ class Scene
 		// inline void addEntity(GameObject* gameObject) { gameObjects.push_back(gameObject); };
 		void addEntity(std::shared_ptr<GameObject> gameObject);
 
+		void delete_object(std::shared_ptr<GameObject> gameObject);
+
 		const double GRAVITY = 5.0;
 	private:
 		// std::vector<GameObject*> gameObjects;
