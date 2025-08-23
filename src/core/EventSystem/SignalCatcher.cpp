@@ -15,6 +15,7 @@ void SignalCatcher::attempt_catch()
 	std::shared_ptr<Signal> recieved_signal = m_event_handler->retrieve_socket(m_event_socket_name);
 	if (recieved_signal)
 	{
+		m_event_handler->empty_socket(m_event_socket_name);
 		if (m_catch_function)
 		{
 			m_catch_function();

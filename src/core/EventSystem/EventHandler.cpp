@@ -21,3 +21,8 @@ void EventHandler::populate_socket(std::string socket_name, std::shared_ptr<Sign
 	// If we want to introduce a queue system for each socket, here is where to do it
 	signal_map[socket_name] = signal;
 }
+
+void EventHandler::empty_socket(std::string socket_name)
+{
+	signal_map[socket_name] = nullptr;
+}

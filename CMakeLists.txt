@@ -19,10 +19,12 @@ add_executable(TerminalEngine
 	src/core/EventSystem/SignalEmitter.cpp
 	src/core/EventSystem/SignalCatcher.cpp
 	src/utils/TerminalTools.cpp
+	src/utils/Timer.cpp
 	src/components/Viewport.cpp
 	src/components/GameObject.cpp
 	example/src/Block.cpp
 	example/src/CatcherTest.cpp
+	example/src/BlockSpawner.cpp
 )
 
 target_include_directories(TerminalEngine PUBLIC

@@ -65,17 +65,25 @@ void Engine::run()
 
 		update(last_delta);
 
-		auto frame_end = clock::now();
-		std::chrono::duration<double> delta = frame_end - frame_start;
+		// auto frame_end = clock::now();
+		// std::chrono::duration<double> delta = frame_end - frame_start;
 
 		// Wait for frame to end to keep a consistent frame rate
-		if (delta < target_frame_duration)
+		// if (delta < target_frame_duration)
+		// {
+		// 	// NOTE: This is not the best way to do this, because we cannot accept input
+		// 	// Instead, I think we should get stuck in a while loop until the right time is hit
+		// 	// sleep(target_frame_duration.count() - delta.count());
+		// 	// std::this_thread::sleep_for(target_frame_duration - delta);
+		// }
+
+		while (clock::now() - frame_start < target_frame_duration)
 		{
-			// NOTE: This is not the best way to do this, because we cannot accept input
-			// Instead, I think we should get stuck in a while loop until the right time is hit
-			// sleep(target_frame_duration.count() - delta.count());
-			std::this_thread::sleep_for(target_frame_duration - delta);
+			// Here we can just check for input or whatever we want to still happen between frames
 		}
+
+		auto frame_end = clock::now();
+		std::chrono::duration<double> delta = frame_end - frame_start;
 
 		last_delta = delta.count();
 	}

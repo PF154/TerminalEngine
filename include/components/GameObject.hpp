@@ -12,12 +12,14 @@
 #include <core/EventSystem/SignalCatcher.hpp>
 #include <core/EventSystem/Signal.hpp>
 #include <core/EventSystem/EventHandler.hpp>
+#include <utils/Timer.hpp>
 
 #include <memory>
 #include <iostream>
 #include <string>
 #include <vector>
 #include <functional>
+#include <type_traits>
 
 class GameObject
 {
@@ -51,17 +53,6 @@ class GameObject
 		std::shared_ptr<Collider> get_collider() { return m_collider; };
 		std::shared_ptr<Transform> get_transform() { return m_transform; };
 		std::shared_ptr<PhysicsBody> get_physics_body() { return m_physics_body; }
-
-		// I think the hard part is choosing where the user sets all these components. Let's think about
-		// what parts of the Engine API are actually available to them. They get init() and process() to
-		// control the GameObject's behavior, so I guess init() is where it makes the most sense. I think
-		// we should maybe make some methods like addMesh, addCollider, addTransform. Maybe it would also
-		// make sense to have a setup() function for the user. It wouldn't be much functionally different
-		// than init(), but it would, by name, clearly define that that is where the object properties should
-		// be set up, absent of a GUI program like how you would do it in Unity or Godot. I kind of like that.
-		// And then init() would be reserved for actual BEHAVIORS of the object that should happen upon
-		// creation/instantiation.
-
 
 		// Other functions that will be useful
 		Position get_position(); 
@@ -97,8 +88,33 @@ class GameObject
 
 		void create_signal_catcher(std::string socket_name, std::function<void()> catch_function);
 
+		std::shared_ptr<Timer> create_new_timer();
+
+		template <typename T>
+		std::shared_ptr<T> initstate_game_object()
+		{
+			std::shared_ptr<T> new_entity = std::make_shared<T>();
+
+			std::shared_ptr<GameObject> game_object_ptr = std::dynamic_pointer_cast<GameObject>(new_entity);
+			if (game_object_ptr)
+			{
+				game_object_ptr->set_scene_data(m_scene_data);
+			}
+			else
+			{
+				std::cerr << "Attempted to instantiate a non-GameObject type, not possible" << std::endl;
+				return nullptr;
+			}
+
+			m_scene_data->m_game_objects.push_back(new_entity);
+			
+			return new_entity;
+		}
+
 		std::shared_ptr<SceneData> m_scene_data;
 		std::vector<std::shared_ptr<SignalCatcher>> m_signal_catchers;
+
+		std::vector<std::shared_ptr<Timer>> m_timers;
 
 		// Originally was going to do this as unordered map, but that seems needlessly complex
 		// for this alternative which does all the same stuff.
@@ -106,5 +122,4 @@ class GameObject
 		std::shared_ptr<Collider> m_collider = nullptr;
 		std::shared_ptr<Transform> m_transform = nullptr;
 		std::shared_ptr<PhysicsBody> m_physics_body = nullptr;
-
 };

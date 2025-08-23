@@ -7,6 +7,8 @@
 #include <components/AnimMesh.hpp>
 #include <components/Transform.hpp>
 
+#include <utils/Timer.hpp>
+
 #include <iostream>
 #include <format>
 #include <memory>
@@ -21,6 +23,8 @@ void GameObject::update(double delta)
 	{
 		catcher->attempt_catch();
 	}
+
+	for (std::shared_ptr<Timer> timer : m_timers) timer->update(delta);
 
 	process(delta);
 	physicsProcess(delta);
@@ -40,7 +44,7 @@ void GameObject::applyGravity(GameObject& object, double delta)
 {
 	// std::cout << "Appling Gravity _____________________________________________________________________________" << std::endl;
 	std::shared_ptr<Transform> obj_trans = object.get_transform();
-	obj_trans->velocity.y += 75.0;
+	obj_trans->velocity.y += 7.0;
 	obj_trans->position.y += obj_trans->velocity.y * delta;
 }
 
@@ -176,3 +180,24 @@ Position GameObject::get_position()
 	}
 	return m_transform->position;
 }
+
+std::shared_ptr<Timer> GameObject::create_new_timer()
+{
+	std::string socket_name = m_scene_data->make_unique_timer_socket_id();
+
+	std::shared_ptr<Timer> new_timer = std::make_shared<Timer>(socket_name, m_scene_data->get_event_handler());
+	
+	m_timers.push_back(new_timer);
+	return new_timer;
+}
+
+// template <typename T>
+// std::shared_ptr<T> GameObject::initstate_game_object()
+// {
+// 	std::shared_ptr<T> new_entity = std::make_shared<T>();
+// 	m_scene_data->m_game_objects.push_back(new_entity);
+// 	return new_entity;
+// }
+
+
+

@@ -33,4 +33,6 @@ class EventHandler
       {
          if (signal_map.count(socket_name) == 0) signal_map[socket_name] = nullptr;
       }
+
+      void empty_socket(std::string socket_name);
 };
