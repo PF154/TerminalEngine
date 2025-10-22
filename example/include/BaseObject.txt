@@ -1,0 +1,65 @@
+#pragma once
+
+class Obj : public GameObject
+{
+	public:
+		Obj();
+		virtual ~Obj() = default;
+
+		void setup() override;
+		void init() override;
+	private:
+		void process(double delta) override;
+		void physicsProcess(double delta) override;
+};
+
+
+
+Leaving the old graphics update code here for now
+
+		// std::shared_ptr<VisualObject> visualObject = std::dynamic_pointer_cast<VisualObject>(gameObject);
+		// if (visualObject)
+		// {
+		// 	// std::cout << "Attempting to get mesh" << std::endl;
+		// 	std::vector<std::string> mesh = visualObject->getVisual();
+		// 	if (printMesh) {
+		// 		for (std::string line : mesh)
+		// 		{
+		// 			debug_log << line << std::endl;
+		// 		}
+		// 		printMesh = false;
+		// 	}
+		// 	// std::cout << "Got visual: " << mesh[0] << std::endl;
+
+		// 	// Calculate which parts of the mesh are on screen
+		// 	int y_size = visualObject->getSize().y;
+		// 	int x_size = visualObject->getSize().x;
+
+		// 	int y_pos = visualObject->getPosition().y;
+		// 	int x_pos = visualObject->getPosition().x;
+
+		// 	// Replace lines of screen with mesh
+		// 	for (int line=0; line<frame.size(); line++)
+		// 	{
+		// 		if (line >= y_pos && line <= y_pos + y_size)
+		// 		{
+		// 			// If we are in here, then we are on a line that could potentially have an object on screen
+
+		// 			if (x_pos < frame[line].length() && x_pos + x_size > 0)
+		// 			{
+		// 				std::string header = frame[line].substr(0, x_pos);
+		// 				std::string object = mesh[line - y_pos];
+		// 				std::string trailer = frame[line].substr(header.size() + object.size(), frame[line].size());
+		// 				// std::string new_line = 	frame[line].substr(0, x_pos) + 	// Empty space before object
+		// 				// 						mesh[y_pos - line] + 			// Object itself
+		// 				// 														// Empty space after object
+		// 				// 						frame[line].substr(x_pos + mesh[0].length() + frame[line].length() -(x_pos + mesh[0].length()));
+		// 				std::string new_line = header + object + trailer;
+		// 				frame[line] = new_line;
+		// 			}
+		// 		}
+		// 	}
+
+			
+
+		// }

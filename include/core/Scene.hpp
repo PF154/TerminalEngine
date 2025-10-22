@@ -22,6 +22,8 @@ class Scene
 			return this->m_scene_data->m_game_objects; 
 			};
 
+		std::shared_ptr<SceneData> get_scene_data() { return m_scene_data; }
+
 		// inline void addEntity(GameObject* gameObject) { gameObjects.push_back(gameObject); };
 		void addEntity(std::shared_ptr<GameObject> gameObject);
 

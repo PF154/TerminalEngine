@@ -24,6 +24,7 @@ class Engine
 		void begin();
 		void update(double delta);
 		void graphicsUpdate(double delta);
+		void physicsUpdate(double delta);
 		void loadNewScene(std::shared_ptr<Scene> new_scene);
 
 		// At the moment these are shared pointers. I feel like I can at least make m_current_scene unique, but this is faster to test with

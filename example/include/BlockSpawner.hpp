@@ -11,7 +11,6 @@ class BlockSpawner : public GameObject
 {
 	public:
 		BlockSpawner();
-		virtual ~BlockSpawner() = default;
 
 		void setup() override;
 	private:

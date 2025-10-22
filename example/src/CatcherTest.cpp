@@ -1,6 +1,7 @@
 #include "../include/CatcherTest.hpp"
 
 #include <fstream>
+#include <string>
 
 std::ofstream catcher_debug_log("debug_log.txt", std::ios::app);
 

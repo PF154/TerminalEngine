@@ -13,6 +13,12 @@ struct Velocity
 	double y;
 };
 
+struct Vec
+{
+	double x;
+	double y;
+};
+
 struct Size
 {
 	int x;

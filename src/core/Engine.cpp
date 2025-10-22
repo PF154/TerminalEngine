@@ -104,6 +104,7 @@ void Engine::update(double delta)
 		if (gameObject->should_delete())
 		{
 			m_current_scene->delete_object(gameObject);
+			continue;
 		}
 		gameObject->update(delta);
 	}
@@ -111,6 +112,11 @@ void Engine::update(double delta)
 	// Draw Frame
 	graphicsUpdate(delta);
 
+}
+
+void Engine::physicsUpdate(double delta)
+{
+	// Physics::processCollisions(m_current_scene->getGameObjects());
 }
 
 void Engine::graphicsUpdate(double delta)
@@ -140,7 +146,7 @@ void Engine::graphicsUpdate(double delta)
 	// std::vector<VisualObject*> visualObjects;
 	// for (GameObject* gameObject : currentScene->getGameObjects())
 
-	for (std::shared_ptr<GameObject> gameObject : m_current_scene->getGameObjects())
+	for (std::shared_ptr<GameObject> gameObject : m_current_scene->get_scene_data()->m_game_objects)
 	{
 		debug_log << "engine graphics update" << std::endl;
 
@@ -210,7 +216,7 @@ void Engine::graphicsUpdate(double delta)
 		clearLine();
 		std::cout << frame[line] << std::endl;
 	}
-	std::cout << "Game objects in scene: " << m_current_scene->getGameObjects().size() << std::endl;
+	std::cout << "Game objects in scene: " << m_current_scene->get_scene_data()->m_game_objects.size() << std::endl;
 	// std::cout << "Filtered objects in scene: " << visualObjects.size() << std::endl;
 	std::cout << "FPS: " << 1.0 / delta << std::endl;
 
@@ -222,7 +228,7 @@ void Engine::loadNewScene(std::shared_ptr<Scene> new_scene)
 	// Old Scene Clean up (probably handled in Scene destructor??)
 
 	m_current_scene = new_scene;
-	for (std::shared_ptr<GameObject> gameObject : m_current_scene->getGameObjects())
+	for (std::shared_ptr<GameObject> gameObject : m_current_scene->get_scene_data()->m_game_objects)
 	{
 		debug_log << "Calling init on " << gameObject << std::endl;
 		gameObject->setup();

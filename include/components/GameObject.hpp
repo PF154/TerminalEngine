@@ -7,6 +7,7 @@
 #include <components/Transform.hpp>
 #include <components/Collider.hpp>
 #include <components/PhysicsBody.hpp>
+#include <components/Area.hpp>
 #include <core/SceneData.hpp>
 #include <core/EventSystem/SignalEmitter.hpp>
 #include <core/EventSystem/SignalCatcher.hpp>
@@ -53,6 +54,7 @@ class GameObject
 		std::shared_ptr<Collider> get_collider() { return m_collider; };
 		std::shared_ptr<Transform> get_transform() { return m_transform; };
 		std::shared_ptr<PhysicsBody> get_physics_body() { return m_physics_body; }
+		std::shared_ptr<Area> get_area() { return m_area; }
 
 		// Other functions that will be useful
 		Position get_position(); 
@@ -105,14 +107,16 @@ class GameObject
 			if (game_object_ptr)
 			{
 				game_object_ptr->set_scene_data(m_scene_data);
+
+				m_scene_data->m_game_objects.push_back(new_entity);
+				game_object_ptr->setup();
+				game_object_ptr->init();
 			}
 			else
 			{
 				std::cerr << "Attempted to instantiate a non-GameObject type, not possible" << std::endl;
 				return nullptr;
 			}
-
-			m_scene_data->m_game_objects.push_back(new_entity);
 			
 			return new_entity;
 		}
@@ -130,6 +134,9 @@ class GameObject
 		std::shared_ptr<Collider> m_collider = nullptr;
 		std::shared_ptr<Transform> m_transform = nullptr;
 		std::shared_ptr<PhysicsBody> m_physics_body = nullptr;
+
+		// It would be nice of objects could have more than one area, but in the name of simplicity, just one for now
+		std::shared_ptr<Area> m_area = nullptr;
 
 		bool mark_for_deletion = false;
 };
