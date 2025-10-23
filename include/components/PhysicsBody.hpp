@@ -21,9 +21,9 @@ class PhysicsBody
 
 		PhysicsBodyType get_body_type() { return m_body_type; }
 
-		std::shared_ptr<Area> get_physics_area() { return m_physics_area; }
+		const std::shared_ptr<Area> get_physics_area() { return m_physics_area; }
 
-		double get_mass() { return m_mass; }
+		const double get_mass() { return m_mass; }
 
 		void contribute_to_next_frame_impulse(Vec impulse) 
 		{ 

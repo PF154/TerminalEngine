@@ -48,8 +48,9 @@ namespace Physics
 			// std::shared_ptr<Area> area = obj->get_area();
 			// if (!area) continue;
 
-			std::shared_ptr<PhysicsBody> phys_bod = obj->get_physics_body();
-			if (!phys_bod) continue;
+			if (!obj->get_physics_body().has_value()) continue;
+			std::shared_ptr<PhysicsBody> phys_bod = obj->get_physics_body().value();
+
 			std::shared_ptr<Area> area = phys_bod->get_physics_area(); // Feel like get_area should be protected and this should be friend func to access it
 			if (!area) continue;
 
@@ -59,8 +60,9 @@ namespace Physics
 			for (int j=i+1; j < game_objects.size(); j++)
 			{
 				std::shared_ptr<GameObject> other = game_objects[j];
-				std::shared_ptr<PhysicsBody> other_phys_bod = other->get_physics_body();
-				if (!other_phys_bod) continue;
+
+				if (!other->get_physics_body().has_value()) continue;
+				std::shared_ptr<PhysicsBody> other_phys_bod = other->get_physics_body().value();
 				std::shared_ptr<Area> other_area = phys_bod->get_physics_area();
 				if (!other_area) continue;
 				// Check if other and obj collide. If they do, add the collision to the map
@@ -76,8 +78,9 @@ namespace Physics
 
 		for (Collision collision : collisions)
 		{
-			std::shared_ptr<PhysicsBody> obj_1_body = collision.obj_1->get_physics_body();
-			std::shared_ptr<PhysicsBody> obj_2_body = collision.obj_2->get_physics_body();
+			// Is there a possibility for a race condition here? Could something remove the physics body before we fully process the collision?
+			std::shared_ptr<PhysicsBody> obj_1_body = collision.obj_1->get_physics_body().value();
+			std::shared_ptr<PhysicsBody> obj_2_body = collision.obj_2->get_physics_body().value();
 
 			Velocity obj_1_vel = obj_1_body->vel;
 			Velocity obj_2_vel = obj_2_body->vel;

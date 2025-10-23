@@ -50,32 +50,40 @@ class GameObject
 		// and if it did, it will render it. I think this simplifys things, becuase otherwise we
 		// have some redundant call like "if (gameObject->has_mesh())". Whereas here we can do
 		// std::shared_ptr<Mesh> obj_mesh = gameObject->get_mesh(); if (obj_mesh) {//render code}
-		std::shared_ptr<Mesh> get_mesh() { return m_mesh; };
-		std::shared_ptr<Collider> get_collider() { return m_collider; };
-		std::shared_ptr<Transform> get_transform() { return m_transform; };
-		std::shared_ptr<PhysicsBody> get_physics_body() { return m_physics_body; }
-		std::shared_ptr<Area> get_area() { return m_area; }
+		std::optional<std::shared_ptr<Mesh>> get_mesh() { return m_mesh; };
+		std::optional<std::shared_ptr<Collider>> get_collider() { return m_collider; };
+		const std::optional<Transform>& get_transform() { return m_transform; };
+		std::optional<std::shared_ptr<PhysicsBody>> get_physics_body() { return m_physics_body; }
+		std::optional<std::shared_ptr<Area>> get_area() { return m_area; }
 
 		// Other functions that will be useful
 		Position get_position(); 
 
 
 		// The following setup functions will be used by the end-user for object definition
+		// NOTE: THE FUNCTIONS THAT TAKE ARGUMENTS SHOULD AVAIL THEMSELVES OF COPY/MOVE CONSTRUCTOR
+
 		void add_satic_mesh();
-		void add_static_mesh(std::shared_ptr<StaticMesh> new_mesh);
+		void add_static_mesh(StaticMesh&& new_mesh);
 
 		void replace_mesh_with_static();
-		void replace_mesh_with_static(std::shared_ptr<StaticMesh> new_mesh);
+		void replace_mesh_with_static(StaticMesh&& new_mesh);
 
 		void add_anim_mesh();
-		void add_anim_mesh(std::shared_ptr<AnimMesh> new_mesh);
+		void add_anim_mesh(AnimMesh&& new_mesh);
 
 		void replace_mesh_with_anim();
-		void replace_mesh_with_anim(std::shared_ptr<AnimMesh> new_mesh);
+		void replace_mesh_with_anim(AnimMesh&& new_mesh);
 
 		// If the user opts for one of the argument-less functions, we need some way for them to still set the values
 		void add_transform();
-		void add_transform(std::shared_ptr<Transform> new_trans);
+		void add_transform(Transform&& new_trans);
+		void set_transform_position(Position new_pos);
+		void set_transform_size(Size new_size);
+
+		void add_physics_body();
+		void add_physics_body(PhysicsBody&& new_body);
+
 
 
 
@@ -90,7 +98,7 @@ class GameObject
 		virtual void process(double delta);
 		virtual void physicsProcess(double delta);
 
-		void applyGravity(GameObject& object, double delta);
+		void applyGravity(double delta);
 
 		std::shared_ptr<SignalEmitter> create_signal_emitter(std::shared_ptr<Signal> signal, std::string socket_name);
 
@@ -130,13 +138,13 @@ class GameObject
 
 		// Originally was going to do this as unordered map, but that seems needlessly complex
 		// for this alternative which does all the same stuff.
-		std::shared_ptr<Mesh> m_mesh = nullptr;
-		std::shared_ptr<Collider> m_collider = nullptr;
-		std::shared_ptr<Transform> m_transform = nullptr;
-		std::shared_ptr<PhysicsBody> m_physics_body = nullptr;
+		std::optional<std::shared_ptr<Mesh>> m_mesh;
+		std::optional<std::shared_ptr<Collider>> m_collider;
+		std::optional<Transform> m_transform;
+		std::optional<std::shared_ptr<PhysicsBody>> m_physics_body;
 
 		// It would be nice of objects could have more than one area, but in the name of simplicity, just one for now
-		std::shared_ptr<Area> m_area = nullptr;
+		std::optional<std::shared_ptr<Area>> m_area;
 
 		bool mark_for_deletion = false;
 };

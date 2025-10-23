@@ -40,12 +40,13 @@ void GameObject::physicsProcess(double delta)
 	
 }
 
-void GameObject::applyGravity(GameObject& object, double delta)
+void GameObject::applyGravity(double delta)
 {
-	// std::cout << "Appling Gravity _____________________________________________________________________________" << std::endl;
-	std::shared_ptr<Transform> obj_trans = object.get_transform();
-	obj_trans->velocity.y += 7.0;
-	obj_trans->position.y += obj_trans->velocity.y * delta;
+	if (m_transform.has_value())
+	{
+		m_transform->velocity.y += 7.0;
+		m_transform->position.y += m_transform->velocity.y * delta;
+	}
 }
 
 std::shared_ptr<SignalEmitter> GameObject::create_signal_emitter(std::shared_ptr<Signal> signal, std::string socket_name)
@@ -96,15 +97,15 @@ void GameObject::add_satic_mesh()
 	m_mesh = std::make_shared<StaticMesh>();
 }
 
-void GameObject::add_static_mesh(std::shared_ptr<StaticMesh> new_mesh)
+void GameObject::add_static_mesh(StaticMesh&& new_mesh)
 {
 	if (m_mesh)
 	{
-		std::cout << "Attempted ot add static mesh to object with existing mesh object; did you mean to use replace_mesh_with_static?" << std::endl;
+		std::cout << "Attempted to add static mesh to object with existing mesh object; did you mean to use replace_mesh_with_static?" << std::endl;
 		return;
 	}
 
-	m_mesh = new_mesh;
+	m_mesh = std::make_shared<StaticMesh>(std::move(new_mesh));
 }
 
 void GameObject::replace_mesh_with_static()
@@ -112,9 +113,9 @@ void GameObject::replace_mesh_with_static()
 	m_mesh = std::make_shared<StaticMesh>();
 }
 
-void GameObject::replace_mesh_with_static(std::shared_ptr<StaticMesh> new_mesh)
+void GameObject::replace_mesh_with_static(StaticMesh&& new_mesh)
 {
-	m_mesh = new_mesh;
+	m_mesh = std::make_shared<StaticMesh>(std::move(new_mesh));
 }
 
 void GameObject::add_anim_mesh()
@@ -128,7 +129,7 @@ void GameObject::add_anim_mesh()
 	m_mesh = std::make_shared<AnimMesh>();
 }
 
-void GameObject::add_anim_mesh(std::shared_ptr<AnimMesh> new_mesh)
+void GameObject::add_anim_mesh(AnimMesh&& new_mesh)
 {
 	if (m_mesh)
 	{
@@ -136,7 +137,7 @@ void GameObject::add_anim_mesh(std::shared_ptr<AnimMesh> new_mesh)
 		return;
 	}
 
-	m_mesh = new_mesh;
+	m_mesh = std::make_shared<AnimMesh>(std::move(new_mesh));
 }
 
 void GameObject::replace_mesh_with_anim()
@@ -144,9 +145,9 @@ void GameObject::replace_mesh_with_anim()
 	m_mesh = std::make_shared<AnimMesh>();
 }
 
-void GameObject::replace_mesh_with_anim(std::shared_ptr<AnimMesh> new_mesh)
+void GameObject::replace_mesh_with_anim(AnimMesh&& new_mesh)
 {
-	m_mesh = new_mesh;
+	m_mesh = std::make_shared<AnimMesh>(std::move(new_mesh));
 }
 
 void GameObject::add_transform()
@@ -157,10 +158,10 @@ void GameObject::add_transform()
 		return;
 	}
 
-	m_transform = std::make_shared<Transform>();
+	m_transform = Transform();
 }
 
-void GameObject::add_transform(std::shared_ptr<Transform> new_trans)
+void GameObject::add_transform(Transform&& new_trans)
 {
 	if (m_transform)
 	{
@@ -168,7 +169,17 @@ void GameObject::add_transform(std::shared_ptr<Transform> new_trans)
 		return;
 	}
 
-	m_transform = new_trans;
+	m_transform = std::move(new_trans);
+}
+
+void GameObject::set_transform_position(Position new_pos)
+{
+	if (m_transform.has_value()) m_transform.value().position = new_pos;
+}
+
+void GameObject::set_transform_size(Size new_size)
+{
+	if (m_transform.has_value()) m_transform.value().size = new_size;
 }
 
 Position GameObject::get_position()

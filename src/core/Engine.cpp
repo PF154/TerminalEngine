@@ -150,9 +150,10 @@ void Engine::graphicsUpdate(double delta)
 	{
 		debug_log << "engine graphics update" << std::endl;
 
-		std::shared_ptr<Mesh> obj_mesh = gameObject->get_mesh();
-		if (obj_mesh)
+		
+		if (gameObject->get_mesh().has_value())
 		{
+			std::shared_ptr<Mesh> obj_mesh = gameObject->get_mesh().value();
 			// std::cout << "Attempting to get mesh" << std::endl;
 			std::vector<std::string> mesh = obj_mesh->get_current_sprite(delta);
 			if (printMesh) 

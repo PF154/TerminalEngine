@@ -27,17 +27,19 @@ Block::Block() : GameObject()
 void Block::setup()
 {
 	// Add transform
-	add_transform();
-	get_transform()->position = Position{4, 4};
-	get_transform()->size = Size{3, 1};
+	Transform t;
+	t.position = Position{4, 4};
+	t.size = Size{3, 1};
+	add_transform(std::move(t));
 
 	// Add mesh
-	add_satic_mesh();
-	get_mesh()->set_sprite(std::vector<std::string>({
+	StaticMesh sm;
+	sm.set_sprite(std::vector<std::string>({
 		"OOO",
 		"OOO"
 	}));
-	get_mesh()->set_size(Size{2, 1});
+	sm.set_size(Size{2, 1});
+	add_static_mesh(std::move(sm));
 
 	// Create Signal emitter
 	std::shared_ptr<Signal> test_signal = std::make_shared<Signal>();
@@ -52,10 +54,8 @@ void Block::init()
 }
 
 void Block::physicsProcess(double delta)
-{
-	applyGravity(*this, delta);
-
-	if (get_transform()->position.y > 60) 
+{	
+	if (get_transform().has_value() && get_transform().value().position.y > 60) 
 	{
 		// block_debug_log << "firing signal from block" << std::endl;
 		// m_test_signal_emitter->emit();

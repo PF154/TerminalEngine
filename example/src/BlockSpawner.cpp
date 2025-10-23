@@ -28,5 +28,5 @@ void BlockSpawner::spawn_new_block()
 
 	std::shared_ptr<Block> block = initstate_game_object<Block>();
 
-	block->get_transform()->position = new_block_pos;
+	block->set_transform_position(new_block_pos);
 }
