@@ -61,7 +61,6 @@ class GameObject
 
 
 		// The following setup functions will be used by the end-user for object definition
-		// NOTE: THE FUNCTIONS THAT TAKE ARGUMENTS SHOULD AVAIL THEMSELVES OF COPY/MOVE CONSTRUCTOR
 
 		void add_satic_mesh();
 		void add_static_mesh(StaticMesh&& new_mesh);
@@ -84,7 +83,7 @@ class GameObject
 		void add_physics_body();
 		void add_physics_body(PhysicsBody&& new_body);
 
-
+		void applyGravity(double delta);
 
 
 
@@ -97,8 +96,6 @@ class GameObject
 
 		virtual void process(double delta);
 		virtual void physicsProcess(double delta);
-
-		void applyGravity(double delta);
 
 		std::shared_ptr<SignalEmitter> create_signal_emitter(std::shared_ptr<Signal> signal, std::string socket_name);
 

@@ -25,7 +25,22 @@ struct Collision
 // like to indicate that the function is specifically for Physics
 namespace Physics
 {
-	static void processCollisions(std::vector<std::shared_ptr<GameObject>>& game_objects)
+	// Ideally we should be passing game_objects by reference
+	void processExternalForces(const std::vector<std::shared_ptr<GameObject>>& game_objects, double delta)
+	{	
+		// Gravity
+		const double gravity = 9.8;
+
+		// This is kind of a stupid way to do this... why are we calling into physics just to call back into GameObject?
+		// For now though, it's fine
+		for (std::shared_ptr<GameObject> obj : game_objects)
+		{
+			if (!obj->get_physics_body().has_value()) continue;
+			obj->applyGravity(delta);
+		}
+	}
+
+	void processCollisions(std::vector<std::shared_ptr<GameObject>>& game_objects)
 	{
 		std::vector<Collision> collisions;
 

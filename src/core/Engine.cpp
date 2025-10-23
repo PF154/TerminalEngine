@@ -4,6 +4,7 @@
 #include <utils/TerminalTools.hpp>
 #include <components/GameObject.hpp>
 #include <components/Mesh.hpp>
+#include <physics/PhysicsEngine.hpp>
 
 
 #include <string>
@@ -109,6 +110,9 @@ void Engine::update(double delta)
 		gameObject->update(delta);
 	}
 
+	// Calculate new positions
+	physicsUpdate(delta);
+
 	// Draw Frame
 	graphicsUpdate(delta);
 
@@ -116,6 +120,7 @@ void Engine::update(double delta)
 
 void Engine::physicsUpdate(double delta)
 {
+	Physics::processExternalForces(m_current_scene->getGameObjects(), delta);
 	// Physics::processCollisions(m_current_scene->getGameObjects());
 }
 

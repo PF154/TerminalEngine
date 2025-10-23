@@ -152,7 +152,7 @@ void GameObject::replace_mesh_with_anim(AnimMesh&& new_mesh)
 
 void GameObject::add_transform()
 {
-	if (m_transform)
+	if (m_transform.has_value())
 	{
 		std::cout << "Attempted to add transform to object with existing transform component" << std::endl;
 		return;
@@ -181,6 +181,18 @@ void GameObject::set_transform_size(Size new_size)
 {
 	if (m_transform.has_value()) m_transform.value().size = new_size;
 }
+
+void GameObject::add_physics_body(PhysicsBody&& new_body)
+{
+	if (m_physics_body.has_value())
+	{
+		std::cout << "Attempted to add transform to object with existing transform component" << std::endl;
+		return;
+	}
+
+	m_physics_body = std::make_shared<PhysicsBody>(std::move(new_body));
+}
+
 
 Position GameObject::get_position()
 {

@@ -41,6 +41,10 @@ void Block::setup()
 	sm.set_size(Size{2, 1});
 	add_static_mesh(std::move(sm));
 
+	// Add physics body
+	PhysicsBody pb;
+	add_physics_body(std::move(pb));
+
 	// Create Signal emitter
 	std::shared_ptr<Signal> test_signal = std::make_shared<Signal>();
 	m_test_signal_emitter = create_signal_emitter(test_signal, "TEST_SIGNAL");
