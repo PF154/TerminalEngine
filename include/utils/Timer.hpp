@@ -20,6 +20,8 @@ class Timer
 
 		bool repeat = false;
 
+		void set_duration(std::chrono::duration<double> new_dur) { duration = new_dur; }
+
 	private:
 		std::chrono::time_point<std::chrono::system_clock> start_time;
 		std::chrono::duration<double> time_elapsed;

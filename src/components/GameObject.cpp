@@ -6,12 +6,18 @@
 #include <components/StaticMesh.hpp>
 #include <components/AnimMesh.hpp>
 #include <components/Transform.hpp>
+#include <components/Area.hpp>
+#include <components/RectArea.hpp>
+#include <components/ComponentUtils.hpp>
 
 #include <utils/Timer.hpp>
 
 #include <iostream>
 #include <format>
 #include <memory>
+#include <fstream>
+
+std::ofstream GO_debug_log("GO_debug.txt", std::ios::app);
 
 // TODO: Make sure that there are checks for value overflow on any transform parameter or
 // param that may change
@@ -28,6 +34,18 @@ void GameObject::update(double delta)
 
 	process(delta);
 	physicsProcess(delta);
+
+	// Update gameobject's position if it was affected by physics
+	if (m_physics_body.has_value()) 
+	{
+		// First make sure that impulses and such are applied
+		m_physics_body.value()->update(delta);
+
+		Velocity vel = m_physics_body.value()->get_velocity();
+
+		m_transform->position.y += vel.y * delta;
+		m_transform->position.x += vel.x * delta;
+	}
 }
 
 void GameObject::process(double delta)
@@ -42,11 +60,6 @@ void GameObject::physicsProcess(double delta)
 
 void GameObject::applyGravity(double delta)
 {
-	if (m_transform.has_value())
-	{
-		m_transform->velocity.y += 7.0;
-		m_transform->position.y += m_transform->velocity.y * delta;
-	}
 }
 
 std::shared_ptr<SignalEmitter> GameObject::create_signal_emitter(std::shared_ptr<Signal> signal, std::string socket_name)
@@ -191,6 +204,26 @@ void GameObject::add_physics_body(PhysicsBody&& new_body)
 	}
 
 	m_physics_body = std::make_shared<PhysicsBody>(std::move(new_body));
+
+	// We should also handle cases like...
+	// What if a physics body without a shape definition is added to it?
+	// What if the body has a shape def but no area?
+	// etc.
+
+	// Try to create a default area if we have the option
+	if (!m_physics_body.value()->get_physics_area())
+	{
+		
+		if (m_transform.has_value())
+		{
+			GO_debug_log << "Adding default physics area" << std::endl;
+			std::shared_ptr<RectArea> default_area = std::make_shared<RectArea>(); 
+			default_area->set_extent(Size{m_transform.value().size.x, m_transform.value().size.y});
+			default_area->origin = m_transform.value().position;
+			GO_debug_log << "Pos: " << default_area->origin.x << ", " << default_area->origin.y << std::endl;
+			m_physics_body.value()->set_physics_area(default_area);
+		}
+	}
 }
 
 

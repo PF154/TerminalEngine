@@ -92,13 +92,14 @@ void Engine::run()
 
 void Engine::update(double delta)
 {
-
 	// At each tick, we want to compute collisions (this should eventually be a part of calling update on objects I think?)
-	// Scene* currentScene = this->m_game->getCurrentScene();
 	if (!m_current_scene) {
 		std::cout << "ERROR: m_current_scene is null!\n" << std::endl;
 		return;
 	}
+
+	// Calculate new positions
+	physicsUpdate(delta);
 
 	for (std::shared_ptr<GameObject> gameObject : m_current_scene->getGameObjects())
 	{ 
@@ -110,9 +111,6 @@ void Engine::update(double delta)
 		gameObject->update(delta);
 	}
 
-	// Calculate new positions
-	physicsUpdate(delta);
-
 	// Draw Frame
 	graphicsUpdate(delta);
 
@@ -120,8 +118,9 @@ void Engine::update(double delta)
 
 void Engine::physicsUpdate(double delta)
 {
+	Physics::updatePhysicsObjects(m_current_scene->getGameObjects(), delta);
 	Physics::processExternalForces(m_current_scene->getGameObjects(), delta);
-	// Physics::processCollisions(m_current_scene->getGameObjects());
+	Physics::processCollisions(m_current_scene->getGameObjects());
 }
 
 void Engine::graphicsUpdate(double delta)
@@ -140,16 +139,10 @@ void Engine::graphicsUpdate(double delta)
 		return;
 	}
 
-	// Scene* currentScene = this->m_game->getCurrentScene();
-	// std::cout << "got scene at " << static_cast<const void*>(currentScene) << std::endl;
-
 	if (!m_current_scene) {
 		std::cout << "ERROR: currentScene is null!\n" << std::endl;
 		return;
 	}
-
-	// std::vector<VisualObject*> visualObjects;
-	// for (GameObject* gameObject : currentScene->getGameObjects())
 
 	for (std::shared_ptr<GameObject> gameObject : m_current_scene->get_scene_data()->m_game_objects)
 	{

@@ -17,7 +17,7 @@
 #include <fstream>
 #include <string>
 
-std::ofstream block_debug_log("debug_log.txt", std::ios::app);
+std::ofstream block_debug_log("block_debug_log.txt", std::ios::app);
 
 Block::Block() : GameObject()
 {
@@ -49,6 +49,8 @@ void Block::setup()
 	std::shared_ptr<Signal> test_signal = std::make_shared<Signal>();
 	m_test_signal_emitter = create_signal_emitter(test_signal, "TEST_SIGNAL");
 
+	if (m_physics_body.has_value()) block_debug_log << "Block has physics body" << std::endl;
+
 	block_debug_log << "completed block setup" << std::endl;
 }
 
@@ -59,6 +61,8 @@ void Block::init()
 
 void Block::physicsProcess(double delta)
 {	
+	block_debug_log << "Block velocity: " << m_physics_body.value()->get_velocity().y << std::endl;
+
 	if (get_transform().has_value() && get_transform().value().position.y > 60) 
 	{
 		// block_debug_log << "firing signal from block" << std::endl;

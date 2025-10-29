@@ -6,6 +6,7 @@
 #include <vector>
 #include <optional>
 #include <algorithm>
+#include <cmath>
 
 
 // |               |
@@ -18,10 +19,7 @@ struct Extent
 
 	double get_overlap_amount(Extent& other)
 	{
-		if (min > other.max || other.min > max)
-			return 1000000.0;
-
-		return abs(std::min(max - other.min, other.max - min));
+		return std::min(max, other.max) - std::max(min, other.min);
 	}
 };
 

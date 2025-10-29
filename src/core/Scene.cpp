@@ -3,6 +3,7 @@
 #include "../../example/include/Block.hpp"
 #include "../../example/include/CatcherTest.hpp"
 #include "../../example/include/BlockSpawner.hpp"
+#include "../../example/include/StaticBlock.hpp"
 #include <core/EventSystem/EventHandler.hpp>
 #include <core/SceneData.hpp>
 
@@ -16,6 +17,9 @@ std::ofstream scene_debug_log("debug_log.txt", std::ios::app);
 
 Scene::Scene()
 {
+	// The following is test code... this should eventually be in some kind of config file
+
+
 	m_scene_data = std::make_shared<SceneData>();
 
 	scene_debug_log << "entered scene constructor" << std::endl;
@@ -35,16 +39,16 @@ Scene::Scene()
 
 	// Block* block = new Block();
 	std::shared_ptr<Block> block = std::make_shared<Block>();
-
 	addEntity(block);
 
 	std::shared_ptr<CatcherTest> testCatcher = std::make_shared<CatcherTest>();
-
 	addEntity(testCatcher);
 
 	std::shared_ptr<BlockSpawner> spawner = std::make_shared<BlockSpawner>();
-
 	addEntity(spawner);
+
+	std::shared_ptr<StaticBlock> static_block = std::make_shared<StaticBlock>();
+	addEntity(static_block);
 
 	// std::shared_ptr<Block> block = instantiateEntity<Block>();
 

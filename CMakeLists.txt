@@ -22,7 +22,9 @@ add_executable(TerminalEngine
 	src/utils/Timer.cpp
 	src/components/Viewport.cpp
 	src/components/GameObject.cpp
+	src/physics/PhysicsEngine.cpp
 	example/src/Block.cpp
+	example/src/StaticBlock.cpp
 	example/src/CatcherTest.cpp
 	example/src/BlockSpawner.cpp
 )

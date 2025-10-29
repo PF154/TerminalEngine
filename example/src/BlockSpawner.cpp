@@ -5,6 +5,7 @@
 
 #include <fstream>
 #include <random>
+#include <chrono>
 
 
 std::ofstream spawner_debug_log("block_debug.txt", std::ios::app);
@@ -18,6 +19,7 @@ void BlockSpawner::setup()
 {
 	std::shared_ptr<Timer> timer = create_new_timer();
 	timer->repeat = true;
+	timer->set_duration(std::chrono::seconds(2));
 
 	create_signal_catcher(timer->get_socket_id(), [this]() { spawn_new_block(); });
 }

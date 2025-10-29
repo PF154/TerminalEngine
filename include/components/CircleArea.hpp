@@ -29,7 +29,8 @@ class CircleArea: public Area
 
 
 			double best_overlap_amount = 100000000.0;
-			Vec best_norm = Vec{0.0, 0.0};
+			bool found = false;
+			Vec best_norm;
 			for (Vec norm : normals)
 			{
 				Extent this_proj = get_projection(norm);
@@ -46,12 +47,26 @@ class CircleArea: public Area
 					double overlap_amount = this_proj.get_overlap_amount(other_proj);
 					if (overlap_amount < best_overlap_amount)
 					{
+						found = true;
 						best_overlap_amount = overlap_amount;
 						best_norm = norm;
 					}
 				}
 			}
-			return std::optional<Vec>{best_norm};
+			
+			if (found)
+			{
+				return std::optional<Vec>{best_norm};
+			}
+			else
+			{
+				return std::optional<Vec>();
+			}
+		}
+
+		Position get_normal_endpoint_from_center(Position center) override
+		{
+			return origin;
 		}
 
 	private:

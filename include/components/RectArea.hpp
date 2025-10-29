@@ -9,6 +9,11 @@
 #include <cmath>
 #include <array>
 #include <optional>
+#include <limits>
+
+#include <fstream>
+
+std::ofstream rect_debug_log("rect_debug_log.txt", std::ios::app);
 
 class CircleArea;
 
@@ -33,30 +38,57 @@ class RectArea: public Area
 			}
 
 			double best_overlap_amount = 100000000.0;
+			bool found = false;
 			Vec best_norm = Vec{0.0, 0.0};
 			for (Vec norm : normals)
 			{
 				Extent this_proj = get_projection(norm);
 				Extent other_proj = other_area->get_projection(norm);
 
-				// Check if the extents do not overlap
-				bool no_overlap = this_proj.min > other_proj.max || other_proj.min > this_proj.max;
-				if (no_overlap)
+				// rect_debug_log << "Area 1 Addr: " << this << std::endl;
+				// rect_debug_log << "Area 2 Addr: " << other_area.get() << std::endl;
+
+
+				double overlap_amount = this_proj.get_overlap_amount(other_proj);
+				if (overlap_amount <= 0.0)
 				{
-					return std::optional<Vec>{};
+					return std::optional<Vec>();
 				}
-				else
+				else if (overlap_amount < best_overlap_amount)
 				{
-					double overlap_amount = this_proj.get_overlap_amount(other_proj);
-					if (overlap_amount < best_overlap_amount)
-					{
-						best_overlap_amount = overlap_amount;
-						best_norm = norm;
-					}
+					found = true;
+					best_overlap_amount = overlap_amount;
+					best_norm = norm;
 				}
 			}
-			return std::optional<Vec>{best_norm};
+			return std::optional<Vec>(best_norm);
 		}
+
+		Position get_normal_endpoint_from_center(Position center) override
+		{
+			// Pick the closest corner to the origin.
+			double shortest = std::numeric_limits<double>::infinity();
+			Position best_corner;
+
+			std::array<Position, 4> positions = {	Position{origin.x, origin.y},
+													Position{origin.x + m_extent.x, origin.y},
+													Position{origin.x, origin.y + m_extent.y},
+													Position{origin.x + m_extent.x, origin.y + m_extent.y}};
+
+			for (Position pos : positions)
+			{
+				double dist = sqrt(pow(pos.x - center.x, 2) + pow(pos.y - center.y, 2));
+				if (dist < shortest)
+				{
+					shortest = dist;
+					best_corner = pos;
+				}
+			}
+
+			return best_corner;
+		}
+
+		void set_extent(Size new_extent) { m_extent = new_extent; }
 
 	private:
 		// Do I maybe want to make two simple structs called rect and circle, and then have each type of
@@ -65,19 +97,22 @@ class RectArea: public Area
 		Extent get_projection(Vec norm) override
 		{
 			// normalize vector
-			norm.x = norm.x / sqrt(norm.x * norm.x + norm.y * norm.y);
-			norm.y = norm.y / sqrt(norm.x * norm.x + norm.y * norm.y);
+			// norm.x = norm.x / sqrt(norm.x * norm.x + norm.y * norm.y);
+			// norm.y = norm.y / sqrt(norm.x * norm.x + norm.y * norm.y);
 
 			std::array<Position, 4> positions = {	Position{origin.x, origin.y},
-													Position{origin.x, origin.y},
-													Position{origin.x, origin.y},
-													Position{origin.x, origin.y}};
+													Position{origin.x + m_extent.x, origin.y},
+													Position{origin.x, origin.y + m_extent.y},
+													Position{origin.x + m_extent.x, origin.y + m_extent.y}};
 
-			double max_proj, min_proj;
-			for (Position pos : positions)
+
+			double first_dot = norm.x * positions[0].x + norm.y * positions[0].y;
+			double max_proj = first_dot;
+			double min_proj = first_dot;
+			// double max_proj, min_proj;
+			for (int i = 1; i < positions.size(); i++)
 			{
-				double dot = norm.x * pos.x + norm.y * pos.y;
-
+				double dot = norm.x * positions[i].x + norm.y * positions[i].y;
 				if (dot > max_proj) max_proj = dot;
 				if (dot < min_proj) min_proj = dot;
 			}
@@ -95,7 +130,7 @@ class RectArea: public Area
 			return std::vector<Vec>({{0, 1}, {1, 0}});
 		}
 
-		Position extent;
+		Size m_extent;
 
 
 };

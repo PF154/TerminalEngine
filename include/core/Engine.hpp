@@ -33,7 +33,7 @@ class Engine
 
 		Viewport m_viewport;
 
-		int m_tick_rate = 30; // Ticks per second
+		int m_tick_rate = 60; // Ticks per second
 
 		// Essential Functions
 		// void createInstance(GameObject* object);
