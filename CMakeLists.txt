@@ -24,6 +24,7 @@ add_executable(TerminalEngine
 	src/components/Viewport.cpp
 	src/components/GameObject.cpp
 	src/physics/PhysicsEngine.cpp
+	src/input/Input.cpp
 	example/src/Block.cpp
 	example/src/StaticBlock.cpp
 	example/src/CatcherTest.cpp

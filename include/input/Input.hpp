@@ -1,6 +1,8 @@
 #pragma once
 
 #include <ncurses.h>
+#include <vector>
+#include <unordered_set>
 
 // Would be cool if this was eventually user-configurable
 enum InputType
@@ -12,31 +14,18 @@ enum InputType
 
 namespace Input
 {
-	void initialize_input()
-	{
-		initscr();
+	// Using vector here instead of set to preserve order
+	extern std::vector<InputType> input_buffer;
 
-		cbreak();
-		noecho();	
-
-		nodelay(stdscr, TRUE);
-	}
+	void initialize_input();
 
 
-	InputType get_input()
-	{
-		int ch;
+	void get();
 
-		ch = getch();
-		if (ch == 'a') return InputType::LEFT;
-		else if (ch == 'd') return InputType::RIGHT;
-		else return InputType::NONE;
-	}
+	void update();
 	
+	std::unordered_set<InputType> get_input_buffer();
 
-	void end_input()
-	{
-		endwin();
-	}
+	bool is_pressed(InputType input);
 
 }

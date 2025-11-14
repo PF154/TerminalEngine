@@ -4,6 +4,7 @@
 #include <core/EventSystem/SignalEmitter.hpp>
 #include <core/EventSystem/Signal.hpp>
 #include <core/EventSystem/EventHandler.hpp>
+#include <input/Input.hpp>
 
 #include <vector>
 #include <string>
@@ -55,8 +56,12 @@ void StaticBlock::init()
 void StaticBlock::physicsProcess(double delta)
 {
 	// Game objects should have some kind of engine syscall where they can get things like viewport size
+	dir = 0;
+	if (Input::is_pressed(InputType::LEFT)) dir -= 1;
+	if (Input::is_pressed(InputType::RIGHT)) dir += 1;
 
-	if (m_transform.value().position.x > 50 || m_transform.value().position.x < -12) dir = dir * -1;
+
+	// if (m_transform.value().position.x > 50 || m_transform.value().position.x < -12) dir = dir * -1;
 	m_transform.value().position.x += speed * dir; 
 
 }

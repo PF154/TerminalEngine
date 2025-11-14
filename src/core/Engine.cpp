@@ -85,7 +85,7 @@ void Engine::run()
 		while (clock::now() - frame_start < target_frame_duration)
 		{
 			// Here we can just check for input or whatever we want to still happen between frames
-			InputType input = Input::get_input();
+			Input::get();
 			// debug_log << input << '\n' << std::endl;
 		}
 
@@ -119,6 +119,8 @@ void Engine::update(double delta)
 
 	// Draw Frame
 	graphicsUpdate(delta);
+
+	Input::update();
 
 }
 
