@@ -3,13 +3,15 @@
 #include <ncurses.h>
 #include <vector>
 #include <unordered_set>
+#include <unordered_map>
 
 // Would be cool if this was eventually user-configurable
 enum InputType
 {
 	NONE,
 	LEFT,
-	RIGHT
+	RIGHT,
+	QUIT
 };
 
 namespace Input
@@ -18,6 +20,7 @@ namespace Input
 	extern std::vector<InputType> input_buffer;
 
 	void initialize_input();
+	inline void end_input() { endwin(); };
 
 
 	void get();

@@ -14,6 +14,7 @@ void Input::initialize_input()
 	cbreak();
 	noecho();	
 
+	keypad(stdscr, TRUE);
 	nodelay(stdscr, TRUE);
 }
 
@@ -26,6 +27,7 @@ void Input::get()
 	ch = getch();
 	if (ch == 'a') input_buffer.push_back(InputType::LEFT);
 	else if (ch == 'd') input_buffer.push_back(InputType::RIGHT);
+	else if (ch == 'q') input_buffer.push_back(InputType::QUIT);
 }
 
 void Input::update()

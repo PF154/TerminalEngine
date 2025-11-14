@@ -22,6 +22,7 @@ class Engine
 		inline void setGame(std::shared_ptr<Game> game) { this->m_game = std::move(game); };
 	private:
 		void begin();
+		void quit();
 		void update(double delta);
 		void graphicsUpdate(double delta);
 		void physicsUpdate(double delta);

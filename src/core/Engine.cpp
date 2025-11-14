@@ -45,6 +45,12 @@ void Engine::begin()
 	}
 }
 
+void Engine::quit()
+{
+	Input::end_input();
+	std::exit(0);
+}
+
 void Engine::run()
 {
 
@@ -98,6 +104,8 @@ void Engine::run()
 
 void Engine::update(double delta)
 {
+	if (Input::is_pressed(InputType::QUIT)) quit();
+
 	// At each tick, we want to compute collisions (this should eventually be a part of calling update on objects I think?)
 	if (!m_current_scene) {
 		std::cout << "ERROR: m_current_scene is null!\n" << std::endl;
