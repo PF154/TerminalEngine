@@ -54,4 +54,9 @@ void StaticBlock::init()
 
 void StaticBlock::physicsProcess(double delta)
 {
+	// Game objects should have some kind of engine syscall where they can get things like viewport size
+
+	if (m_transform.value().position.x > 50 || m_transform.value().position.x < -12) dir = dir * -1;
+	m_transform.value().position.x += speed * dir; 
+
 }

@@ -5,9 +5,10 @@ project(TerminalEngine)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+find_package(Curses REQUIRED)
+include_directories(${CURSES_INCLUDE_DIR})
+
 include_directories(include)
-
-
 
 
 add_executable(TerminalEngine
@@ -33,3 +34,5 @@ target_include_directories(TerminalEngine PUBLIC
     $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
 )
+
+target_link_libraries(TerminalEngine PRIVATE ${CURSES_LIBRARIES})

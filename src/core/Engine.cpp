@@ -5,6 +5,8 @@
 #include <components/GameObject.hpp>
 #include <components/Mesh.hpp>
 #include <physics/PhysicsEngine.hpp>
+#include <input/Input.hpp>
+#include <ncurses.h>
 
 
 #include <string>
@@ -31,13 +33,15 @@ Engine::~Engine()
 
 void Engine::begin()
 {
+	Input::initialize_input();
+
 	this->m_game->play();
 
 	loadNewScene(m_game->getCurrentScene());
 
 	for (int i=0; i<this->m_viewport.getYSize()+2; i++) 
 	{
-		std::cout << "." << std::string(this->m_viewport.getXSize()+2, '.') << std::endl;
+		// std::cout << "." << std::string(this->m_viewport.getXSize()+2, '.') << std::endl;
 	}
 }
 
@@ -58,7 +62,7 @@ void Engine::run()
 	const std::chrono::duration<double> target_frame_duration{1.0 / m_tick_rate};
 
 
-	debug_log << "target_frame_duration = " << target_frame_duration << std::endl;
+	// debug_log << "target_frame_duration = " << target_frame_duration << std::endl;
 
 	double last_delta = 0.0;
 	while (true) {
@@ -81,6 +85,8 @@ void Engine::run()
 		while (clock::now() - frame_start < target_frame_duration)
 		{
 			// Here we can just check for input or whatever we want to still happen between frames
+			InputType input = Input::get_input();
+			// debug_log << input << '\n' << std::endl;
 		}
 
 		auto frame_end = clock::now();
@@ -130,7 +136,7 @@ void Engine::graphicsUpdate(double delta)
 	// Frame corresponds to the frame to be rendered, not just the "picture frame" outline of the viewport
 	// We do, however, use the viewport outline as a starting point
 	std::vector<std::string> frame = this->m_viewport.getVisual();
-	moveCursorUp(frame.size() + 2);
+	// moveCursorUp(frame.size() + 2);
 
 	// // Due to z-sorting, this loop should automatically iterate back-to-front
 
@@ -146,7 +152,7 @@ void Engine::graphicsUpdate(double delta)
 
 	for (std::shared_ptr<GameObject> gameObject : m_current_scene->get_scene_data()->m_game_objects)
 	{
-		debug_log << "engine graphics update" << std::endl;
+		// debug_log << "engine graphics update" << std::endl;
 
 		
 		if (gameObject->get_mesh().has_value())
@@ -181,9 +187,9 @@ void Engine::graphicsUpdate(double delta)
 				continue;
 			}
 
-			debug_log << "engine graphics update: about to print" << std::endl;
-			debug_log << "x,y = " << x_pos << ", " << y_pos << std::endl;
-			debug_log << "x,y size = " << x_size << ", " << y_size << std::endl;
+			// debug_log << "engine graphics update: about to print" << std::endl;
+			// debug_log << "x,y = " << x_pos << ", " << y_pos << std::endl;
+			// debug_log << "x,y size = " << x_size << ", " << y_size << std::endl;
 
 			// Replace lines of screen with mesh
 			// We need some kind of check here, or maybe in mesh to ensure that the size correctly reflects the size of the object
@@ -210,14 +216,20 @@ void Engine::graphicsUpdate(double delta)
 		}	
 	}
 
+	clear();
+
 	for (int line=0; line<frame.size(); line++)
 	{
-		clearLine();
-		std::cout << frame[line] << std::endl;
+		// clearLine();
+		// std::cout << frame[line] << std::endl;
+		move(line, 0);
+		printw("%s", frame[line].c_str());
 	}
-	std::cout << "Game objects in scene: " << m_current_scene->get_scene_data()->m_game_objects.size() << std::endl;
+	// std::cout << "Game objects in scene: " << m_current_scene->get_scene_data()->m_game_objects.size() << std::endl;
 	// std::cout << "Filtered objects in scene: " << visualObjects.size() << std::endl;
-	std::cout << "FPS: " << 1.0 / delta << std::endl;
+	// std::cout << "FPS: " << 1.0 / delta << std::endl;
+
+	refresh();
 
 
 }
@@ -229,7 +241,7 @@ void Engine::loadNewScene(std::shared_ptr<Scene> new_scene)
 	m_current_scene = new_scene;
 	for (std::shared_ptr<GameObject> gameObject : m_current_scene->get_scene_data()->m_game_objects)
 	{
-		debug_log << "Calling init on " << gameObject << std::endl;
+		// debug_log << "Calling init on " << gameObject << std::endl;
 		gameObject->setup();
 		gameObject->init();
 	}

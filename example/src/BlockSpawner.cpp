@@ -26,7 +26,7 @@ void BlockSpawner::setup()
 
 void BlockSpawner::spawn_new_block()
 {
-	Position new_block_pos = Position{double((rand() % 25) + 4), 4.0};
+	Position new_block_pos = Position{double((rand() % 40) + 4), 4.0};
 
 	std::shared_ptr<Block> block = initstate_game_object<Block>();
 

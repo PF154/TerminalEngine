@@ -22,5 +22,8 @@ class StaticBlock : public GameObject
 
 		std::shared_ptr<SignalEmitter> m_test_signal_emitter;
 
+		double speed = 0.25;
+		int dir = 1;
+
 
 };
